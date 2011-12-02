@@ -19,6 +19,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
+import sys
 import subprocess
 import warnings
 
@@ -39,9 +40,11 @@ def graphviz(dot, prog='dot', format_='png'):
     gv_process = subprocess.Popen(
         [prog, '-T%s' % format_], stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,stderr=subprocess.PIPE, close_fds=True)
+    if sys.version_info[0] == 3:
+        dot = bytes(dot, 'utf-8')
     output, error = gv_process.communicate(input=dot)
     if gv_process.returncode != 0:
-        raise GraphvizError(':'.join(error.split(':')[1:]))
+        raise GraphvizError(':'.join(str(error).split(':')[1:]))
     elif error:
-        warnings.warn(error.partition(':')[2].strip(), GraphvizWarning)
+        warnings.warn(str(error).partition(':')[2].strip(), GraphvizWarning)
     return output
