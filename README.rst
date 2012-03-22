@@ -8,7 +8,7 @@ Usage
 -----
 dot2what can be run with Bottle's development server by executing::
 
-    python dot2what.py' which
+    python dot2what.py
 
 dot2what can also be run using Bottle's WSGI interface by importing 'app' as 'application'::
 
